@@ -7,7 +7,8 @@ import edu.austral.dissis.chess.piece.Piece;
 public class KingRule implements Rule {
     @Override
     public boolean validateRule(Board board, Movement movement) {
-        Castle castle = new Castle();
+        Castle castle = new Castle(movement.getPiece().getPosition().getY());
+        Check check = new Check();
         Diagonal diagonalMove = new Diagonal();
         Vertical verticalMove = new Vertical();
         Horizontal horizontalMove = new Horizontal();
@@ -28,13 +29,15 @@ public class KingRule implements Rule {
             }
             int row = Math.abs(difRow);
             int col = Math.abs(difCol);
+            if (check.validateMove(board, movement)){
+
+            }
             // chequea si esta amenazado o si ya se movio, en cualquiera de esos casos no lo deja hacer castle
             if (row + col == 1 || movement.getPiece().hasMoved()){
                 return false;
             }
             if (col > 1) {
                  castle.validateMove(board, movement);
-                 return true;
             }
         }
         return false;

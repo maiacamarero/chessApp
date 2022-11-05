@@ -72,6 +72,10 @@ public class Piece {
         }
     }
 
+    public List<Rule> getRules() {
+        return rules;
+    }
+
     public boolean moveTo(Position otherPosition) {
         if (board != null){
             for (Rule rule : rules) {

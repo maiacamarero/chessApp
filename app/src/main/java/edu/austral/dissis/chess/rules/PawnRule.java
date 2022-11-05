@@ -5,6 +5,7 @@ import edu.austral.dissis.chess.movements.Diagonal;
 import edu.austral.dissis.chess.movements.Movement;
 import edu.austral.dissis.chess.movements.Vertical;
 import edu.austral.dissis.chess.piece.Piece;
+import edu.austral.dissis.chess.piece.Queen;
 
 public class PawnRule implements Rule {
     @Override
@@ -50,5 +51,15 @@ public class PawnRule implements Rule {
             return true;
         }
         return false;
+    }
+
+    public Piece requestQueen(Board board, Movement movement) {
+        Piece target = board.getPiece(movement.getFinalPosition());
+        if (validateRule(board, movement)) {
+            if (movement.getFinalPosition().getY() == 1 || movement.getFinalPosition().getY() == 8) {
+                target = new Queen(board, movement.getFinalPosition(), target.getTeam());
+            }
+        }
+        return target;
     }
 }

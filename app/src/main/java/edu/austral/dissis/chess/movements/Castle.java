@@ -14,11 +14,16 @@ import java.util.List;
 public class Castle implements MovementValidator{
 
     private boolean isCastle = false;
+    private int yCoordinate;
+
+    public Castle(int yCoordinate) {
+        this.yCoordinate = yCoordinate;
+    }
 
     @Override
     public boolean validateMove(Board board, Movement movement) {
-//        Horizontal horizontalMove = new Horizontal();
-//        Piece target = board.getPiece(movement.getFinalPosition());
+        Horizontal horizontalMove = new Horizontal();
+        Piece target = board.getPiece(movement.getFinalPosition());
         int owner = (movement.getPiece().getTeam().equals(Team.WHITE)) ? 0 : 1;
         int exitRow = (movement.getPiece().getTeam().equals(Team.WHITE)) ? 8 : 1;
 //        if (horizontalMove.validateMove(board, movement) && (movement.getPiece().getPosition().getX() == exitRow) && (movement.getFinalPosition().getY() == exitRow + 2 * increment)){
@@ -35,7 +40,38 @@ public class Castle implements MovementValidator{
 //            isCastle = true;
 //            return true;
 //        }
-        Position targetPosition = movement.getFinalPosition();
+        Position fromPosition = movement.getPiece().getPosition();
+        Position toPosition = movement.getFinalPosition();
+        if (!board.isInBounds(fromPosition) || !board.isInBounds(toPosition)) return false;
+        Piece king = board.getPiece(fromPosition);
+        if (toPosition.getY() != fromPosition.getY() || fromPosition.getY() != yCoordinate) return false;
+        int xMove = toPosition.getX() - fromPosition.getX();
+        if (xMove == -2){ // esta para la izquierda
+            Position rookFrom = new Position(0, yCoordinate);
+            Position rookTo = board.getPosition(fromPosition.getX() - 1, yCoordinate);
+            Position position = board.getPosition(rookFrom.getX(), rookFrom.getY());
+            if (rookTo != null && board.getPiece(rookTo) != null) return false;
+            if (position != null && board.getPiece(position).getPieceType() == PieceType.ROOK){ // hay un rook en la izquierda
+                Movement rookMove = new Movement(board.getPiece(rookFrom), rookTo);
+                if (horizontalMove.validateMove(board, rookMove)){
+                    return true;
+                }
+            }
+        }else if (xMove == 2){
+            Position rookFrom = new Position(exitRow - 1, yCoordinate);
+            Position rookTo = new Position(fromPosition.getX() + 1, yCoordinate);
+            Position position = board.getPosition(rookFrom.getX(), rookFrom.getY());
+            if (rookTo != null && board.getPiece(rookTo) != null) return false;
+            if (position != null && board.getPiece(position).getPieceType() == PieceType.ROOK) { // hay un rook en la izquierda
+                Movement rookMove = new Movement(board.getPiece(rookFrom), rookTo);
+                if (horizontalMove.validateMove(board, rookMove)){
+                    return true;
+                }
+            }
+        }
+        return false;
+
+        /*Position targetPosition = movement.getFinalPosition();
         Piece targetPiece = board.getPiece(movement.getFinalPosition());
 
         List<Position> castlingMove = new ArrayList<>(Arrays.asList(new Position(3, 1), new Position(7, 1), new Position(3, 8), new Position(7, 8)));
@@ -50,7 +86,7 @@ public class Castle implements MovementValidator{
             return success;
         }else {
             return targetPiece.moveTo(targetPosition);
-        }
+        }*/
     }
 
     private boolean checkRook(Board board, List<Position> rooksPosition, List<Position> castlingMove, int owner, int moveType) {

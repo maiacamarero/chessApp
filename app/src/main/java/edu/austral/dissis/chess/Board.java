@@ -1,10 +1,9 @@
 package edu.austral.dissis.chess;
 
-import edu.austral.dissis.chess.gui.Move;
 import edu.austral.dissis.chess.movements.Movement;
-import edu.austral.dissis.chess.piece.King;
 import edu.austral.dissis.chess.piece.Piece;
 import edu.austral.dissis.chess.piece.PieceType;
+import edu.austral.dissis.chess.piece.Queen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -88,6 +87,14 @@ public class Board {
         }
     }
 
+    public Piece requestQueen(Piece piece, Position position, Team team){
+        removeFromBoard(piece);
+        Piece queen = new Queen(this, position, team);
+        placePiece(queen, position);
+        return queen;
+    }
+
+
     public boolean isGameOver(){
         return isCheckmate(Team.WHITE) || isCheckmate(Team.BLACK);
     }
@@ -109,8 +116,10 @@ public class Board {
         Position attackPath = new Position(movement.getPiece().getPosition().getY() + increment, movement.getPiece().getPosition().getX());
         for (Position position : positions) {
             // si el king se puede mover a una posición donde no se vea atacado, retorna falso.
-            if (king.moveTo(position) && positionOfKing(team) != position) {
-                return false;
+            if (king.moveTo(position) ) {
+                if (positionOfKing(team) != position){
+                    return false;
+                }
             }
             Piece tmpPiece = getPiece(position);
             if (tmpPiece != null) {
