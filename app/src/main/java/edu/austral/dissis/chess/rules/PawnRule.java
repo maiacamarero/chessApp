@@ -14,7 +14,7 @@ public class PawnRule implements Rule {
         Diagonal diagonalMove = new Diagonal(); // come
         Piece target = board.getPiece(movement.getFinalPosition());
         int increment = (movement.getPiece().getTeam().equals(Team.WHITE)) ? -1 : 1;
-        int exitRow = (movement.getPiece().getTeam().equals(Team.WHITE)) ? 7 : 2;
+        int exitRow = (movement.getPiece().getTeam().equals(Team.WHITE)) ? (board.getPreferredSize() - 1) : (board.getPreferredSize() - (board.getPreferredSize() - 2));
         //movimiento normal de los peones
         if (verticalMove.validateMove(board, movement) && (movement.getPiece().getPosition().getY() + increment == movement.getFinalPosition().getY())){
             //no come asi

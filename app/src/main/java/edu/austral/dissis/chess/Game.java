@@ -7,16 +7,19 @@ import java.util.Scanner;
 public class Game {
 
     private Board board;
-    private int preferredSize = 8;
+    private int preferredSize;
     private Team currentTeam;
+
     Scanner userInput = new Scanner(System.in);
 
     public Game() {
-        board = new Board(preferredSize);
         currentTeam = Team.WHITE;
     }
 
     public void setup(){
+        this.preferredSize = 8;
+        board = new Board(preferredSize);
+
         this.addPawn(board.getPosition(1, 2), Team.BLACK);
         this.addPawn(board.getPosition(2, 2), Team.BLACK);
         this.addPawn(board.getPosition(3, 2), Team.BLACK);
@@ -52,6 +55,56 @@ public class Game {
         this.addBishop(board.getPosition(6, 8), Team.WHITE);
         this.addKnight(board.getPosition(7, 8), Team.WHITE);
         this.addRook(board.getPosition(8, 8), Team.WHITE);
+        currentTeam = Team.WHITE;
+    }
+
+    public void setupTweedle(){
+        this.preferredSize = 10;
+        board = new Board(preferredSize);
+
+        addPawn(board.getPosition(1, 2), Team.BLACK);
+        addPawn(board.getPosition(2, 2), Team.BLACK);
+        addPawn(board.getPosition(3, 2), Team.BLACK);
+        addPawn(board.getPosition(4, 2), Team.BLACK);
+        addPawn(board.getPosition(5, 2), Team.BLACK);
+        addPawn(board.getPosition(6, 2), Team.BLACK);
+        addPawn(board.getPosition(7, 2), Team.BLACK);
+        addPawn(board.getPosition(8, 2), Team.BLACK);
+        addPawn(board.getPosition(9, 2), Team.BLACK);
+        addPawn(board.getPosition(10, 2), Team.BLACK);
+
+        addRook(board.getPosition(1, 1), Team.BLACK);
+        addKnight(board.getPosition(2, 1), Team.BLACK);
+        addBishop(board.getPosition(3, 1), Team.BLACK);
+        addQueen(board.getPosition(4, 1), Team.BLACK);
+        addKing(board.getPosition(5, 1), Team.BLACK);
+        addKing(board.getPosition(6, 1), Team.BLACK);
+        addQueen(board.getPosition(7, 1), Team.BLACK);
+        addBishop(board.getPosition(8, 1), Team.BLACK);
+        addKnight(board.getPosition(9, 1), Team.BLACK);
+        addRook(board.getPosition(10, 1), Team.BLACK);
+
+        addPawn(board.getPosition(1, 9), Team.WHITE);
+        addPawn(board.getPosition(2, 9), Team.WHITE);
+        addPawn(board.getPosition(3, 9), Team.WHITE);
+        addPawn(board.getPosition(4, 9), Team.WHITE);
+        addPawn(board.getPosition(5, 9), Team.WHITE);
+        addPawn(board.getPosition(6, 9), Team.WHITE);
+        addPawn(board.getPosition(7, 9), Team.WHITE);
+        addPawn(board.getPosition(8, 9), Team.WHITE);
+        addPawn(board.getPosition(9, 9), Team.WHITE);
+        addPawn(board.getPosition(10, 9), Team.WHITE);
+
+        addRook(board.getPosition(1, 10), Team.WHITE);
+        addKnight(board.getPosition(2, 10), Team.WHITE);
+        addBishop(board.getPosition(3, 10), Team.WHITE);
+        addQueen(board.getPosition(4, 10), Team.WHITE);
+        addKing(board.getPosition(5, 10), Team.WHITE);
+        addKing(board.getPosition(6, 10), Team.WHITE);
+        addQueen(board.getPosition(7, 10), Team.WHITE);
+        addBishop(board.getPosition(8, 10), Team.WHITE);
+        addKnight(board.getPosition(9, 10), Team.WHITE);
+        addRook(board.getPosition(10, 10), Team.WHITE);
         currentTeam = Team.WHITE;
     }
 

@@ -3,7 +3,7 @@ package edu.austral.dissis.chess;
 import edu.austral.dissis.chess.movements.Movement;
 import edu.austral.dissis.chess.piece.Piece;
 import edu.austral.dissis.chess.piece.PieceType;
-import edu.austral.dissis.chess.piece.Queen;
+import edu.austral.dissis.chess.rules.QueenRule;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +26,6 @@ public class Board {
         pieces = new ArrayList<>();
         whites = new ArrayList<>();
         blacks = new ArrayList<>();
-
         fillBoard();
         piecesPositions = new HashMap<>();
         historicalPositions = new HashMap<>();
@@ -38,6 +37,10 @@ public class Board {
                 positions.add(new Position(i, j));
             }
         }
+    }
+
+    public int getPreferredSize() {
+        return preferredSize;
     }
 
     public boolean isInBounds(Position position) {
@@ -89,11 +92,10 @@ public class Board {
 
     public Piece requestQueen(Piece piece, Position position, Team team){
         removeFromBoard(piece);
-        Piece queen = new Queen(this, position, team);
+        Piece queen = new Piece(piece.getBoard(), position, team, List.of(new QueenRule()), PieceType.QUEEN);
         placePiece(queen, position);
         return queen;
     }
-
 
     public boolean isGameOver(){
         return isCheckmate(Team.WHITE) || isCheckmate(Team.BLACK);

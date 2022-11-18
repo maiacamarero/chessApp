@@ -6,22 +6,35 @@ import edu.austral.dissis.chess.movements.Movement;
 import edu.austral.dissis.chess.movements.MovementValidator;
 import edu.austral.dissis.chess.piece.Piece;
 import edu.austral.dissis.chess.piece.PieceType;
-import edu.austral.dissis.chess.rules.QueenRule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class MyGameEngine implements GameEngine {
 
     Game game;
     GameIntegration gameIntegration = new GameIntegration();
     MovementValidator movementValidator;
+    Scanner sc = new Scanner(System.in);
+
 
     public MyGameEngine() {
         game = new Game();
         movementValidator = new Check();
     }
 
+    private void chooseConfiguration(){
+        System.out.println("Ingrese la configuración deseada: \n 1. Classic \n 2. Tweedle");
+        int config = sc.nextInt();
+        switch (config){
+            case 1 -> game.setup();
+            case 2 -> game.setupTweedle();
+            default -> game.setup();
+        };
+    }
+
+    //podemos tener una clase que sea configuration o algo asi y que ahi se hagan los distintos tipos de boards
     @NotNull
     @Override
     public MoveResult applyMove(@NotNull Move move) {
@@ -69,7 +82,8 @@ public class MyGameEngine implements GameEngine {
     @NotNull
     @Override
     public InitialState init() {
-        game.setup();
+        //game.setup();
+        game.setupTweedle();
         BoardSize boardSize = gameIntegration.translateSize(game.getPreferredSize());
         List<ChessPiece> pieces = gameIntegration.translatePieces(game.getBoard(), game.getBoard().getPieces());
         PlayerColor playerColor = gameIntegration.translateTeam(game.getCurrentTeam());
