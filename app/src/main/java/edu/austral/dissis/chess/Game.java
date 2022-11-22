@@ -57,27 +57,12 @@ public class Game {
         this.addBishop(board.getPosition(6, 8), Team.WHITE);
         this.addKnight(board.getPosition(7, 8), Team.WHITE);
         this.addRook(board.getPosition(8, 8), Team.WHITE);
-        currentTeam = Team.WHITE;
     }
 
     public void setupTweedle(){
         this.sixeX = 10;
         this.sizeY = 10;
-        board = new Board(sixeX, sizeY);
-
-        addPawn(board.getPosition(1, 2), Team.BLACK);
-        addPawn(board.getPosition(2, 2), Team.BLACK);
-        addPawn(board.getPosition(3, 2), Team.BLACK);
-        addPawn(board.getPosition(4, 2), Team.BLACK);
-        addPawn(board.getPosition(5, 2), Team.BLACK);
-        addPawn(board.getPosition(6, 2), Team.BLACK);
-        addPawn(board.getPosition(7, 2), Team.BLACK);
-        addPawn(board.getPosition(8, 2), Team.BLACK);
-        addPawn(board.getPosition(9, 2), Team.BLACK);
-        addPawn(board.getPosition(10, 2), Team.BLACK);
-
-        addRook(board.getPosition(1, 1), Team.BLACK);
-        addKnight(board.getPosition(2, 1), Team.BLACK);
+        createBoardForNonClassicGame();
         addBishop(board.getPosition(3, 1), Team.BLACK);
         addQueen(board.getPosition(4, 1), Team.BLACK);
         addKing(board.getPosition(5, 1), Team.BLACK);
@@ -108,27 +93,12 @@ public class Game {
         addBishop(board.getPosition(8, 10), Team.WHITE);
         addKnight(board.getPosition(9, 10), Team.WHITE);
         addRook(board.getPosition(10, 10), Team.WHITE);
-        currentTeam = Team.WHITE;
     }
 
     public void setupCapablanca(){
         this.sixeX = 10;
         this.sizeY = 8;
-        board = new Board(sixeX, sizeY);
-
-        addPawn(board.getPosition(1, 2), Team.BLACK);
-        addPawn(board.getPosition(2, 2), Team.BLACK);
-        addPawn(board.getPosition(3, 2), Team.BLACK);
-        addPawn(board.getPosition(4, 2), Team.BLACK);
-        addPawn(board.getPosition(5, 2), Team.BLACK);
-        addPawn(board.getPosition(6, 2), Team.BLACK);
-        addPawn(board.getPosition(7, 2), Team.BLACK);
-        addPawn(board.getPosition(8, 2), Team.BLACK);
-        addPawn(board.getPosition(9, 2), Team.BLACK);
-        addPawn(board.getPosition(10, 2), Team.BLACK);
-
-        addRook(board.getPosition(1, 1), Team.BLACK);
-        addKnight(board.getPosition(2, 1), Team.BLACK);
+        createBoardForNonClassicGame();
         addArchbishop(board.getPosition(3, 1), Team.BLACK);
         addBishop(board.getPosition(4, 1), Team.BLACK);
         addQueen(board.getPosition(5, 1), Team.BLACK);
@@ -151,7 +121,7 @@ public class Game {
 
         addRook(board.getPosition(1, 8), Team.WHITE);
         addKnight(board.getPosition(2, 8), Team.WHITE);
-        addArchbishop(board.getPosition(3, 8), Team.BLACK);
+        addArchbishop(board.getPosition(3, 8), Team.WHITE);
         addBishop(board.getPosition(4, 8), Team.WHITE);
         addQueen(board.getPosition(5, 8), Team.WHITE);
         addKing(board.getPosition(6, 8), Team.WHITE);
@@ -159,7 +129,24 @@ public class Game {
         addChancellor(board.getPosition(8, 8), Team.WHITE);
         addKnight(board.getPosition(9, 8), Team.WHITE);
         addRook(board.getPosition(10, 8), Team.WHITE);
-        currentTeam = Team.WHITE;
+    }
+
+    private void createBoardForNonClassicGame() {
+        board = new Board(sixeX, sizeY);
+
+        addPawn(board.getPosition(1, 2), Team.BLACK);
+        addPawn(board.getPosition(2, 2), Team.BLACK);
+        addPawn(board.getPosition(3, 2), Team.BLACK);
+        addPawn(board.getPosition(4, 2), Team.BLACK);
+        addPawn(board.getPosition(5, 2), Team.BLACK);
+        addPawn(board.getPosition(6, 2), Team.BLACK);
+        addPawn(board.getPosition(7, 2), Team.BLACK);
+        addPawn(board.getPosition(8, 2), Team.BLACK);
+        addPawn(board.getPosition(9, 2), Team.BLACK);
+        addPawn(board.getPosition(10, 2), Team.BLACK);
+
+        addRook(board.getPosition(1, 1), Team.BLACK);
+        addKnight(board.getPosition(2, 1), Team.BLACK);
     }
 
     public void setCurrentTeam(Team currentTeam) {

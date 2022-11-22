@@ -31,11 +31,9 @@ public class RookRule implements Rule {
                 Piece pieceInPath = board.getPiece(path1);
                 if (pieceInPath != null){
                     return false;
-                }else if (castleMove.isCastle()){
-                    return true;
                 }
-                return true;
             }
+            return true;
         }
         return false;
     }

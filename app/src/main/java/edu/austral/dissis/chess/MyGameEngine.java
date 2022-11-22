@@ -25,17 +25,6 @@ public class MyGameEngine implements GameEngine {
         movementValidator = new Check();
     }
 
-    private void chooseConfiguration(){
-        System.out.println("Ingrese la configuración deseada: \n 1. Classic \n 2. Tweedle");
-        int config = sc.nextInt();
-        switch (config){
-            case 1 -> game.setup();
-            case 2 -> game.setupTweedle();
-            default -> game.setup();
-        };
-    }
-
-    //podemos tener una clase que sea configuration o algo asi y que ahi se hagan los distintos tipos de boards
     @NotNull
     @Override
     public MoveResult applyMove(@NotNull Move move) {
@@ -57,10 +46,10 @@ public class MyGameEngine implements GameEngine {
             assert playerColor != null;
             return new NewGameState(pieces, playerColor);
         }*/else {
-            //no anda ya estoy de mal humor
-            if (piece.getPieceType() == PieceType.PAWN && (toPosition.getY() == 1 || toPosition.getY() == 8)){
+            //no anda
+            /*if (piece.getPieceType() == PieceType.PAWN && (toPosition.getY() == 1 || toPosition.getY() == 8)){
                 piece = game.getBoard().requestQueen(piece, toPosition, piece.getTeam());
-            }
+            }*/
             boolean moveTo = piece.moveTo(toPosition);
             List<ChessPiece> pieces = gameIntegration.translatePieces(game.getBoard(), game.getBoard().getPieces());
             PlayerColor playerColor = getCurrentPlayer(moveTo, gameIntegration.translateTeam(game.getCurrentTeam()));
@@ -86,9 +75,29 @@ public class MyGameEngine implements GameEngine {
         game.setup();
         //game.setupTweedle();
         //game.setupCapablanca();
+        //chooseConfiguration();
         BoardSize boardSize = gameIntegration.translateSize(game.getSixeX(), game.getSizeY());
         List<ChessPiece> pieces = gameIntegration.translatePieces(game.getBoard(), game.getBoard().getPieces());
         PlayerColor playerColor = gameIntegration.translateTeam(game.getCurrentTeam());
         return new InitialState(boardSize, pieces, playerColor);
+    }
+
+    private void chooseConfiguration(){
+        boolean continuar = true;
+        while (continuar){
+            System.out.println("Ingrese la configuración deseada: \n 1. Classic \n 2. Tweedle \n 3. Capablanca");
+            int option = sc.nextInt();
+            if (option == 1){
+                game.setup();
+                continuar = false;
+            }else if (option == 2){
+                game.setupTweedle();
+                continuar = false;
+            }else {
+                game.setupCapablanca();
+                continuar = false;
+            }
+        }
+
     }
 }
