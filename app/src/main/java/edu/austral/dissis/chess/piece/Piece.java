@@ -93,7 +93,7 @@ public class Piece {
                     return true;
                 }else return false;
             }
-        }throw new RuntimeException("board is null");
+        }return false;
     }
 
     private void eatPiece(Piece piece) {

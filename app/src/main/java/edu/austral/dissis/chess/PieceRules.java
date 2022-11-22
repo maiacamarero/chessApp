@@ -20,18 +20,18 @@ public class PieceRules {//AHORA ESTE VA A SER tipo un validator de las rules po
     }
 
     public void fillMap(Piece piece){
-        if (piece instanceof Pawn){
-            pieceRuleMap.put(piece, new PawnRule());
-        }else if (piece instanceof Queen){
-            pieceRuleMap.put(piece, new QueenRule());
-        }else if (piece instanceof King){
-            pieceRuleMap.put(piece, new KingRule());
-        }else if (piece instanceof Bishop){
-            pieceRuleMap.put(piece, new BishopRule());
-        }else if (piece instanceof Rook){
-            pieceRuleMap.put(piece, new RookRule());
+        if (piece.getPieceType().equals(PieceType.PAWN)){
+            pieceTypeRuleEnumMap.put(piece.getPieceType(), new PawnRule());
+        }else if (piece.getPieceType().equals(PieceType.QUEEN)){
+            pieceTypeRuleEnumMap.put(piece.getPieceType(), new QueenRule());
+        }else if (piece.getPieceType().equals(PieceType.KING)){
+            pieceTypeRuleEnumMap.put(piece.getPieceType(), new KingRule());
+        }else if (piece.getPieceType().equals(PieceType.BISHOP)){
+            pieceTypeRuleEnumMap.put(piece.getPieceType(), new BishopRule());
+        }else if (piece.getPieceType().equals(PieceType.ROOK)){
+            pieceTypeRuleEnumMap.put(piece.getPieceType(), new RookRule());
         }else{
-            pieceRuleMap.put(piece, new KnightRule());
+            pieceTypeRuleEnumMap.put(piece.getPieceType(), new KnightRule());
         }
     }
 }

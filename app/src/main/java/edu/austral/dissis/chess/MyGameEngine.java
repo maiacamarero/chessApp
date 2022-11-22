@@ -1,5 +1,6 @@
 package edu.austral.dissis.chess;
 
+import edu.austral.dissis.chess.adapter.GameIntegration;
 import edu.austral.dissis.chess.gui.*;
 import edu.austral.dissis.chess.movements.Check;
 import edu.austral.dissis.chess.movements.Movement;
@@ -82,9 +83,10 @@ public class MyGameEngine implements GameEngine {
     @NotNull
     @Override
     public InitialState init() {
-        //game.setup();
-        game.setupTweedle();
-        BoardSize boardSize = gameIntegration.translateSize(game.getPreferredSize());
+        game.setup();
+        //game.setupTweedle();
+        //game.setupCapablanca();
+        BoardSize boardSize = gameIntegration.translateSize(game.getSixeX(), game.getSizeY());
         List<ChessPiece> pieces = gameIntegration.translatePieces(game.getBoard(), game.getBoard().getPieces());
         PlayerColor playerColor = gameIntegration.translateTeam(game.getCurrentTeam());
         return new InitialState(boardSize, pieces, playerColor);

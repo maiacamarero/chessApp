@@ -1,5 +1,7 @@
-package edu.austral.dissis.chess;
+package edu.austral.dissis.chess.adapter;
 
+import edu.austral.dissis.chess.Board;
+import edu.austral.dissis.chess.Team;
 import edu.austral.dissis.chess.gui.*;
 import edu.austral.dissis.chess.gui.Position;
 import edu.austral.dissis.chess.piece.Piece;
@@ -33,7 +35,7 @@ public class GameIntegration {
         return chessPieces;
     }
 
-    public BoardSize translateSize(int size){
-        return new BoardSize(size, size);
+    public BoardSize translateSize(int sizeX, int sizeY){
+        return new BoardSize(sizeX, sizeY);
     }
 }

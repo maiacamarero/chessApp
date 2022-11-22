@@ -15,13 +15,29 @@ public class Board {
     private Map<Position, Piece> piecesPositions;
     private List<Piece> pieces;
     private List<Position> positions;
-    private int preferredSize;
+    //private int preferredSize;
     private Map<Position, Piece> historicalPositions;
     private List<Piece> whites;
     private List<Piece> blacks;
+    private int sixeX;
+    private int sizeY;
 
     public Board(int size) {
-        this.preferredSize = size;
+        //this.preferredSize = size;
+        this.sizeY = size;
+        this.sixeX = size;
+        positions = new ArrayList<>();
+        pieces = new ArrayList<>();
+        whites = new ArrayList<>();
+        blacks = new ArrayList<>();
+        fillBoard();
+        piecesPositions = new HashMap<>();
+        historicalPositions = new HashMap<>();
+    }
+
+    public Board(int sizeX, int sizeY){
+        this.sixeX = sizeX;
+        this.sizeY = sizeY;
         positions = new ArrayList<>();
         pieces = new ArrayList<>();
         whites = new ArrayList<>();
@@ -32,19 +48,23 @@ public class Board {
     }
 
     public void fillBoard(){
-        for (int i = 1; i <= preferredSize; i++) {
-            for (int j = 1; j <= preferredSize; j++) {
+        for (int i = 1; i <= sixeX; i++) {
+            for (int j = 1; j <= sizeY; j++) {
                 positions.add(new Position(i, j));
             }
         }
     }
 
-    public int getPreferredSize() {
-        return preferredSize;
+    public int getSixeX() {
+        return sixeX;
+    }
+
+    public int getSizeY() {
+        return sizeY;
     }
 
     public boolean isInBounds(Position position) {
-        if ((position.getX() <= preferredSize && position.getX() > 0) && (position.getY() <= preferredSize && position.getY() > 0)){
+        if ((position.getX() <= sixeX && position.getX() > 0) && (position.getY() <= sizeY && position.getY() > 0)){
             return true;
         }else{
             return false;
