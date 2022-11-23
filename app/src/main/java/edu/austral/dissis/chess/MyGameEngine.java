@@ -6,7 +6,6 @@ import edu.austral.dissis.chess.movements.Check;
 import edu.austral.dissis.chess.movements.Movement;
 import edu.austral.dissis.chess.movements.MovementValidator;
 import edu.austral.dissis.chess.piece.Piece;
-import edu.austral.dissis.chess.piece.PieceType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -16,13 +15,13 @@ public class MyGameEngine implements GameEngine {
 
     Game game;
     GameIntegration gameIntegration = new GameIntegration();
-    MovementValidator movementValidator;
+    MovementValidator checkValidator;
     Scanner sc = new Scanner(System.in);
 
 
     public MyGameEngine() {
         game = new Game();
-        movementValidator = new Check();
+        checkValidator = new Check();
     }
 
     @NotNull
@@ -36,22 +35,25 @@ public class MyGameEngine implements GameEngine {
             return new InvalidMove("No hay nada en esa posición.");
         } else if (piece.getTeam() != game.getCurrentTeam()){
             return new InvalidMove("Es el turno del equipo " + game.getCurrentTeam().toString());
-        }/*else if (movementValidator.validateMove(game.getBoard(), movement)){
-            return new GameOver(gameIntegration.translateTeam(game.getCurrentTeam()));
-        }else if (game.getBoard().isValidCastling(Position position1, Position position2)){
-            game.getBoard().castle(Position position1, Position position2);
-            boolean moveTo = true;
-            List<ChessPiece> pieces = gameIntegration.translatePieces(game.getBoard(), game.getBoard().getPieces());
-            PlayerColor playerColor = getCurrentPlayer(moveTo, gameIntegration.translateTeam(game.getCurrentTeam()));
-            assert playerColor != null;
-            return new NewGameState(pieces, playerColor);
-        }*/else {
+//        } else if (game.isCheck()) {
+//            return new InvalidMove("EL REY ESTA EN PELIGRO");
+
+        }else {
             //no anda
             /*if (piece.getPieceType() == PieceType.PAWN && (toPosition.getY() == 1 || toPosition.getY() == 8)){
                 piece = game.getBoard().requestQueen(piece, toPosition, piece.getTeam());
             }*/
-            boolean moveTo = piece.moveTo(toPosition);
+
+            boolean moveTo = piece.moveGeneric(toPosition);
+//            Team enemy;
+//            if (game.getCurrentTeam() == Team.BLACK){
+//                enemy = Team.WHITE;
+//            }else enemy = Team.BLACK;
+
             List<ChessPiece> pieces = gameIntegration.translatePieces(game.getBoard(), game.getBoard().getPieces());
+
+//            if (game.getBoard().isInCheck(movement)) return new InvalidMove("El rey " + enemy + " esta en jaque");
+
             PlayerColor playerColor = getCurrentPlayer(moveTo, gameIntegration.translateTeam(game.getCurrentTeam()));
             assert playerColor != null;
             return new NewGameState(pieces, playerColor);

@@ -19,7 +19,7 @@ public class Check implements MovementValidator{
         Team playerTeam = movement.getPiece().getTeam();
         Team opponentTeam = playerTeam == Team.WHITE ? Team.BLACK : Team.WHITE;
         List<Piece> piecesOnBoard = board.getPieces();
-        for (Piece pieceOnBoard: piecesOnBoard){ //check all enemy pieces
+        for (Piece pieceOnBoard: piecesOnBoard){ //chequea todas las piezas enemigas
             if (pieceOnBoard != null && pieceOnBoard.getTeam() == opponentTeam){
                 for (Piece attacker : getAttackingPieces(board, movement)) {
                     if (attacker != null){
@@ -36,7 +36,7 @@ public class Check implements MovementValidator{
         Team playerTeam = movement.getPiece().getTeam();
         List<Piece> piecesOnBoard = board.getPieces();
         Position kingPosition = new Position(0, 0);
-        for (Piece pieceOnBoard: piecesOnBoard) { // search for king
+        for (Piece pieceOnBoard: piecesOnBoard) { // busco el rey
             if (pieceOnBoard != null && pieceOnBoard.getTeam() == playerTeam && pieceOnBoard.getPieceType() == PieceType.KING){
                 kingPosition = pieceOnBoard.getPosition();
                 break;

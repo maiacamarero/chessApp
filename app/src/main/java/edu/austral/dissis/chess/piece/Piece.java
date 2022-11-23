@@ -2,8 +2,10 @@ package edu.austral.dissis.chess.piece;
 
 import edu.austral.dissis.chess.*;
 import edu.austral.dissis.chess.movements.Movement;
+import edu.austral.dissis.chess.movements.MovementValidator;
 import edu.austral.dissis.chess.rules.Rule;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Piece {
@@ -16,6 +18,7 @@ public class Piece {
     private Board board;
     private List<Rule> rules;
     private PieceType pieceType;
+    private boolean isCheck;
 
     public Piece(Board board, Position position, Team team, List<Rule> rules, PieceType pieceType) {
         this.position = position;
@@ -26,6 +29,7 @@ public class Piece {
         eaten = false;
         this.initialPosition = position;
         this.pieceType = pieceType;
+        this.isCheck = false;
     }
 
     public Position getInitialPosition() {
@@ -96,13 +100,39 @@ public class Piece {
         }return false;
     }
 
+    public boolean getOutOfCheck(Position otherPosition) {
+        if (board != null){
+            for (Rule rule : rules) {
+                if (rule.validateRule(board, new Movement(this, otherPosition))) {
+                    if (board.getPiece(getPosition()) == this){
+                        board.removeFromBoard(this);
+                    }
+                    Piece target = board.getPiece(otherPosition);
+
+                    if (target != null) {
+                        this.eatPiece(target);
+                    }
+                    this.position = otherPosition;
+                    this.hasMoved = true;
+                    board.placePiece(this, otherPosition);
+                    isCheck = false;
+                    return true;
+                }
+            }
+        }return false;
+    }
+
+    public boolean moveGeneric(Position otherPosition){
+        if (isCheck){
+            return getOutOfCheck(otherPosition);
+        }else return moveTo(otherPosition);
+    }
+
     private void eatPiece(Piece piece) {
         piece.setEaten(true);
         board.getPieces().remove(piece);
         board.removeFromBoard(piece);
     }
-
-
 
     public void setEaten(boolean eaten) {
         this.eaten = eaten;
