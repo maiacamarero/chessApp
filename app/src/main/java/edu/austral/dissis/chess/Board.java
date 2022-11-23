@@ -1,6 +1,5 @@
 package edu.austral.dissis.chess;
 
-import edu.austral.dissis.chess.movements.Movement;
 import edu.austral.dissis.chess.piece.Piece;
 import edu.austral.dissis.chess.piece.PieceType;
 import edu.austral.dissis.chess.rules.QueenRule;
@@ -86,7 +85,7 @@ public class Board {
         return blacks;
     }
 
-    public Piece getPiece(Position position){
+    public Piece getPiece(Position position) {
         if (isInBounds(position)){
             return piecesPositions.get(position);
         }throw new RuntimeException("Position is out of bounds.");
@@ -120,33 +119,6 @@ public class Board {
 
     public List<Position> getPositions() {
         return positions;
-    }
-
-    public boolean isInCheck(Movement movement) { //chequea todas las piezas enemigas
-        Team opponentTeam = movement.getPiece().getTeam() == Team.WHITE ? Team.BLACK : Team.WHITE;
-        for (Piece pieceOnBoard: pieces){
-            if (pieceOnBoard.getTeam() != opponentTeam){
-                for (Piece attacker : getAttackingPieces(movement)) {
-                    if (attacker != null){
-                        attacker.setCheck(true);
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    private List<Piece> getAttackingPieces(Movement movement) {
-        List<Piece> attackersPositions = new ArrayList<>();
-        Team playerTeam = movement.getPiece().getTeam();
-        Piece king = getKingByColor(playerTeam.getEnemyTeam());
-        for (Piece piece : pieces) {
-            if (piece.moveTo(king.getPosition()) && king.getTeam() != piece.getTeam()) {
-                attackersPositions.add(piece);
-            }
-        }
-        return attackersPositions;
     }
 
     private Piece getKingByColor(Team team){

@@ -6,7 +6,6 @@ import edu.austral.dissis.chess.movements.Movement;
 import edu.austral.dissis.chess.movements.MovementValidator;
 import edu.austral.dissis.chess.rules.Rule;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Piece {
@@ -97,50 +96,66 @@ public class Piece {
                     this.position = otherPosition;
                     this.hasMoved = true;
                     board.placePiece(this, otherPosition);
-                    if (checkValidator.validateMove(board, new Movement(this, otherPosition))){
-                        isCheck = true;
-                    }
+                    //checksIfCheck(otherPosition);
                     return true;
                 }else return false;
             }
         }return false;
     }
 
-    public void setCheck(boolean check) {
-        isCheck = check;
-    }
-
-    public boolean getOutOfCheck(Position otherPosition) {
+    public boolean canMove(Position otherPosition) { // para chequear el jaque
         if (board != null){
             for (Rule rule : rules) {
                 if (rule.validateRule(board, new Movement(this, otherPosition))) {
-                    if (board.getPiece(getPosition()) == this){
-                        board.removeFromBoard(this);
-                    }
-                    Piece target = board.getPiece(otherPosition);
-
-                    if (target != null) {
-                        this.eatPiece(target);
-                    }
-                    this.position = otherPosition;
-                    this.hasMoved = true;
-                    board.placePiece(this, otherPosition);
-                    if (!checkValidator.validateMove(board, new Movement(this, otherPosition))){
-                        isCheck = false;
-                        return true;
-                    }else return false;
+                    //isCheck = true;
+                    return true;
+                }else {
+                    //isCheck = false;
+                    return false;
                 }
             }
         }return false;
     }
 
-    // nose porque cuando va a estar en jaque se mueve la queen contraria al lugar donde el rey estaría en jaque
-    // y me come el rey :(
-    // todo lo demas anda bien
+    public boolean getOutOfCheck(Position otherPosition) {
+        if (board != null){
+            for (Rule rule : rules) {
+                Position originalPosition = getPosition();
+                if (rule.validateRule(board, new Movement(this, otherPosition))) {
+                    checksIfCheck(otherPosition);
+                    if (!isCheck){
+                        if (board.getPiece(getPosition()) == this){
+                            board.removeFromBoard(this);
+                        }
+                        Piece target = board.getPiece(otherPosition);
+
+                        if (target != null) {
+                            this.eatPiece(target);
+                        }
+                        this.position = otherPosition;
+                        this.hasMoved = true;
+                        board.placePiece(this, otherPosition);
+                        return true;
+                    } else{
+                        this.position = originalPosition;
+                        return false;
+                    }
+                }
+            }
+        }return false;
+    }
+
     public boolean moveGeneric(Position otherPosition){
+        checksIfCheck(otherPosition);
         if (isCheck){
             return getOutOfCheck(otherPosition);
         }else return moveTo(otherPosition);
+    }
+
+    public void checksIfCheck(Position otherPosition){
+        if (checkValidator.validateMove(board, new Movement(this, otherPosition))){
+            isCheck = true;
+        }else isCheck = false;
     }
 
     private void eatPiece(Piece piece) {
