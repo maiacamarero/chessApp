@@ -20,7 +20,7 @@ public class Check implements MovementValidator{
         Team opponentTeam = playerTeam == Team.WHITE ? Team.BLACK : Team.WHITE;
         List<Piece> piecesOnBoard = board.getPieces();
         for (Piece pieceOnBoard: piecesOnBoard){ //chequea todas las piezas enemigas
-            if (pieceOnBoard != null && pieceOnBoard.getTeam() == opponentTeam){
+            if (pieceOnBoard != null && pieceOnBoard.getTeam() == playerTeam){
                 for (Piece attacker : getAttackingPieces(board, movement)) {
                     if (attacker != null){
                         return true;
@@ -34,14 +34,29 @@ public class Check implements MovementValidator{
     private List<Piece> getAttackingPieces(Board board, Movement movement) {
         List<Piece> attackersPositions = new ArrayList<>();
         Team playerTeam = movement.getPiece().getTeam();
-        List<Piece> piecesOnBoard = board.getPieces();
+        //List<Piece> piecesOnBoard = board.getPieces();
         Position kingPosition = new Position(0, 0);
-        for (Piece pieceOnBoard: piecesOnBoard) { // busco el rey
-            if (pieceOnBoard != null && pieceOnBoard.getTeam() == playerTeam && pieceOnBoard.getPieceType() == PieceType.KING){
-                kingPosition = pieceOnBoard.getPosition();
-                break;
+        if (playerTeam == Team.BLACK){
+            for (int i = 0; i < board.getBlacks().size(); i++) {
+                if (board.getBlacks().get(i) != null && board.getBlacks().get(i).getPieceType() == PieceType.KING){
+                    kingPosition = board.getBlacks().get(i).getPosition();
+                    break;
+                }
+            }
+        }else {
+            for (int i = 0; i < board.getWhites().size(); i++) {
+                if (board.getWhites().get(i) != null && board.getWhites().get(i).getPieceType() == PieceType.KING){
+                    kingPosition = board.getWhites().get(i).getPosition();
+                    break;
+                }
             }
         }
+//        for (Piece pieceOnBoard: piecesOnBoard) { // busco el rey
+//            if (pieceOnBoard != null && pieceOnBoard.getTeam() == playerTeam.getEnemyTeam() && pieceOnBoard.getPieceType() == PieceType.KING){
+//                kingPosition = pieceOnBoard.getPosition();
+//                break;
+//            }
+//        }
         Piece king = board.getPiece(kingPosition);
         for (Piece piece : board.getPieces()) {
             if (piece.moveTo(kingPosition) && king.getTeam() != piece.getTeam()) {

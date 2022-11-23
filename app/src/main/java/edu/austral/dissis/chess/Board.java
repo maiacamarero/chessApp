@@ -1,9 +1,6 @@
 package edu.austral.dissis.chess;
 
-import edu.austral.dissis.chess.gui.GameOver;
-import edu.austral.dissis.chess.movements.Check;
 import edu.austral.dissis.chess.movements.Movement;
-import edu.austral.dissis.chess.movements.MovementValidator;
 import edu.austral.dissis.chess.piece.Piece;
 import edu.austral.dissis.chess.piece.PieceType;
 import edu.austral.dissis.chess.rules.QueenRule;
@@ -23,7 +20,6 @@ public class Board {
     private List<Piece> blacks;
     private int sizeX;
     private int sizeY;
-    private List<Piece> listOfAttackingPieces;
 
     public Board(int sizeX, int sizeY){
         this.sizeX = sizeX;
@@ -35,7 +31,6 @@ public class Board {
         fillBoard();
         piecesPositions = new HashMap<>();
         historicalPositions = new HashMap<>();
-        listOfAttackingPieces = new ArrayList<>();
     }
 
     public void fillBoard(){
@@ -73,9 +68,6 @@ public class Board {
     public void removeFromBoard(Piece piece) {
         piecesPositions.remove(piece.getPosition());
         pieces.remove(piece);
-        if (piece.getTeam() == Team.BLACK){
-            blacks.remove(piece);
-        }else whites.remove(piece);
     }
 
     public Position getPosition(int x, int y){
@@ -83,7 +75,15 @@ public class Board {
             if (position.getX() == x && position.getY() == y) {
                 return position;
             }
-        }throw new RuntimeException("Invalid position.");
+        }throw new RuntimeException("Invalid position."); // esto esta mal obvio
+    }
+
+    public List<Piece> getWhites() {
+        return whites;
+    }
+
+    public List<Piece> getBlacks() {
+        return blacks;
     }
 
     public Piece getPiece(Position position){
@@ -97,8 +97,6 @@ public class Board {
             piecesPositions.put(position, piece);
             historicalPositions.put(position, piece);
             pieces.add(piece);
-            //capaz hay que hacerlo aca
-
             if (piece.getTeam() == Team.BLACK){
                 blacks.add(piece);
             }else whites.add(piece);
@@ -127,9 +125,10 @@ public class Board {
     public boolean isInCheck(Movement movement) { //chequea todas las piezas enemigas
         Team opponentTeam = movement.getPiece().getTeam() == Team.WHITE ? Team.BLACK : Team.WHITE;
         for (Piece pieceOnBoard: pieces){
-            if (pieceOnBoard.getTeam() == opponentTeam){
+            if (pieceOnBoard.getTeam() != opponentTeam){
                 for (Piece attacker : getAttackingPieces(movement)) {
                     if (attacker != null){
+                        attacker.setCheck(true);
                         return true;
                     }
                 }
@@ -141,41 +140,23 @@ public class Board {
     private List<Piece> getAttackingPieces(Movement movement) {
         List<Piece> attackersPositions = new ArrayList<>();
         Team playerTeam = movement.getPiece().getTeam();
-        List<Piece> piecesOnBoard = pieces;
-        Position kingPosition = new Position(0, 0);
-        for (Piece pieceOnBoard: piecesOnBoard) { // busco el rey
-            if (pieceOnBoard != null && pieceOnBoard.getTeam() == playerTeam && pieceOnBoard.getPieceType() == PieceType.KING){
-                kingPosition = pieceOnBoard.getPosition();
-                break;
-            }
-        }
-        Piece king = getPiece(kingPosition);
+        Piece king = getKingByColor(playerTeam.getEnemyTeam());
         for (Piece piece : pieces) {
-            if (piece.moveTo(kingPosition) && king.getTeam() != piece.getTeam()) {
+            if (piece.moveTo(king.getPosition()) && king.getTeam() != piece.getTeam()) {
                 attackersPositions.add(piece);
-                break;
             }
         }
         return attackersPositions;
     }
 
-    private Position positionOfKing(Team team){
-//        for (Position position : positions) {
-//            Piece piece = getPiece(position);
-//            if (piece != null) {
-//                if (piece.getPieceType() == PieceType.KING && piece.getTeam() == team) {
-//                    return position;
-//                }
-//            }
-//        }throw new RuntimeException("game over");
-
-        Position kingPosition = new Position(0, 0);
+    private Piece getKingByColor(Team team){
+        Piece king = null;
         for (Piece pieceOnBoard: pieces) { // busco el rey
             if (pieceOnBoard != null && pieceOnBoard.getTeam() == team && pieceOnBoard.getPieceType() == PieceType.KING){
-                kingPosition = pieceOnBoard.getPosition();
+                king = pieceOnBoard;
                 break;
             }
         }
-        return kingPosition;
+        return king;
     }
 }

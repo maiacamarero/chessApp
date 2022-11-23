@@ -1,6 +1,7 @@
 package edu.austral.dissis.chess.piece;
 
 import edu.austral.dissis.chess.*;
+import edu.austral.dissis.chess.movements.Check;
 import edu.austral.dissis.chess.movements.Movement;
 import edu.austral.dissis.chess.movements.MovementValidator;
 import edu.austral.dissis.chess.rules.Rule;
@@ -80,6 +81,8 @@ public class Piece {
         return rules;
     }
 
+    private MovementValidator checkValidator = new Check();
+
     public boolean moveTo(Position otherPosition) {
         if (board != null){
             for (Rule rule : rules) {
@@ -94,10 +97,17 @@ public class Piece {
                     this.position = otherPosition;
                     this.hasMoved = true;
                     board.placePiece(this, otherPosition);
+                    if (checkValidator.validateMove(board, new Movement(this, otherPosition))){
+                        isCheck = true;
+                    }
                     return true;
                 }else return false;
             }
         }return false;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
     }
 
     public boolean getOutOfCheck(Position otherPosition) {
@@ -115,13 +125,18 @@ public class Piece {
                     this.position = otherPosition;
                     this.hasMoved = true;
                     board.placePiece(this, otherPosition);
-                    isCheck = false;
-                    return true;
+                    if (!checkValidator.validateMove(board, new Movement(this, otherPosition))){
+                        isCheck = false;
+                        return true;
+                    }else return false;
                 }
             }
         }return false;
     }
 
+    // nose porque cuando va a estar en jaque se mueve la queen contraria al lugar donde el rey estaría en jaque
+    // y me come el rey :(
+    // todo lo demas anda bien
     public boolean moveGeneric(Position otherPosition){
         if (isCheck){
             return getOutOfCheck(otherPosition);
