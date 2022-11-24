@@ -10,7 +10,6 @@ import java.util.List;
 
 public class Piece {
 
-    private boolean eaten;
     private Position position;
     private final Position initialPosition;
     private final Team team;
@@ -18,6 +17,7 @@ public class Piece {
     private Board board;
     private List<Rule> rules;
     private PieceType pieceType;
+    private MovementValidator checkValidator = new Check();
     private boolean isCheck;
 
     public Piece(Board board, Position position, Team team, List<Rule> rules, PieceType pieceType) {
@@ -26,7 +26,6 @@ public class Piece {
         hasMoved = false;
         this.board = board;
         this.rules = rules;
-        eaten = false;
         this.initialPosition = position;
         this.pieceType = pieceType;
         this.isCheck = false;
@@ -56,31 +55,12 @@ public class Piece {
         return isCheck;
     }
 
-    public void makeMove(Position otherPosition) {
-        if (board != null){
-            for (Rule rule : rules) {
-                if (rule.validateRule(board, new Movement(this, otherPosition))) {
-                    if (board.getPiece(getPosition()) == this){
-                        board.removeFromBoard(this);
-                    }
-                    Piece target = board.getPiece(otherPosition);
-                    this.position = otherPosition;
-                    if (target != null) {
-                        this.eatPiece(target);
-                    }
-                    this.hasMoved = true;
-                    board.placePiece(this, otherPosition);
-                    System.out.println("se movió con éxito");
-                }else System.out.println("Invalid movement");
-            }
-        }
+    public boolean moveGeneric(Position otherPosition){
+        checksIfIsCheck(otherPosition);
+        if (isCheck){
+            return getOutOfCheck(otherPosition);
+        }else return moveTo(otherPosition);
     }
-
-    public List<Rule> getRules() {
-        return rules;
-    }
-
-    private MovementValidator checkValidator = new Check();
 
     public boolean moveTo(Position otherPosition) {
         if (board != null){
@@ -97,9 +77,38 @@ public class Piece {
                     this.hasMoved = true;
                     board.placePiece(this, otherPosition);
                     return true;
-                }else return false;
+                }
             }
         }return false;
+    }
+
+    public boolean getOutOfCheck(Position otherPosition) {
+        if (board != null) {
+            for (Rule rule : rules) {
+                Position originalPosition = getPosition();
+                if (rule.validateRule(board, new Movement(this, otherPosition))) {
+                    //checksIfIsCheck(otherPosition);
+                    if (!isCheck) {
+                        if (board.getPiece(getPosition()) == this) {
+                            board.removeFromBoard(this);
+                        }
+                        Piece target = board.getPiece(otherPosition);
+
+                        if (target != null) {
+                            this.eatPiece(target);
+                        }
+                        this.position = otherPosition;
+                        this.hasMoved = true;
+                        board.placePiece(this, otherPosition);
+                        return true;
+                    } else {
+                        this.position = originalPosition;
+                        return false;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public boolean canMove(Position otherPosition) { // para chequear el jaque
@@ -114,41 +123,6 @@ public class Piece {
         }return false;
     }
 
-    public boolean getOutOfCheck(Position otherPosition) {
-        if (board != null){
-            for (Rule rule : rules) {
-                Position originalPosition = getPosition();
-                if (rule.validateRule(board, new Movement(this, otherPosition))) {
-                    //checksIfIsCheck(otherPosition);
-                    if (!isCheck){
-                        if (board.getPiece(getPosition()) == this){
-                            board.removeFromBoard(this);
-                        }
-                        Piece target = board.getPiece(otherPosition);
-
-                        if (target != null) {
-                            this.eatPiece(target);
-                        }
-                        this.position = otherPosition;
-                        this.hasMoved = true;
-                        board.placePiece(this, otherPosition);
-                        return true;
-                    } else{
-                        this.position = originalPosition;
-                        return false;
-                    }
-                }
-            }
-        }return false;
-    }
-
-    public boolean moveGeneric(Position otherPosition){
-        checksIfIsCheck(otherPosition);
-        if (isCheck){
-            return getOutOfCheck(otherPosition);
-        }else return moveTo(otherPosition);
-    }
-
     public void checksIfIsCheck(Position otherPosition){
         if (checkValidator.validateMove(board, new Movement(this, otherPosition))){
             isCheck = true;
@@ -156,17 +130,16 @@ public class Piece {
     }
 
     private void eatPiece(Piece piece) {
-        piece.setEaten(true);
-        board.getPieces().remove(piece);
+        //board.getPieces().remove(piece);
         board.removeFromBoard(piece);
-    }
-
-    public void setEaten(boolean eaten) {
-        this.eaten = eaten;
     }
 
     public Board getBoard() {
         return board;
+    }
+
+    public List<Rule> getRules() {
+        return rules;
     }
 
 }

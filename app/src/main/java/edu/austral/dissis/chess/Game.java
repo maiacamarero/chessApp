@@ -13,7 +13,7 @@ public class Game {
         currentTeam = Team.WHITE;
     }
 
-    public void setup(){
+    public void setupClassic(){
         this.sixeX = 8;
         this.sizeY = 8;
         board = new Board(sixeX, sizeY);
@@ -55,46 +55,25 @@ public class Game {
         this.addRook(board.getPosition(8, 8), Team.WHITE);
     }
 
-    public void setupTweedle(){
-        this.sixeX = 10;
-        this.sizeY = 10;
-        createBoardForNonClassicGame();
-        addBishop(board.getPosition(3, 1), Team.BLACK);
-        addQueen(board.getPosition(4, 1), Team.BLACK);
-        addKing(board.getPosition(5, 1), Team.BLACK);
-        addKing(board.getPosition(6, 1), Team.BLACK);
-        addQueen(board.getPosition(7, 1), Team.BLACK);
-        addBishop(board.getPosition(8, 1), Team.BLACK);
-        addKnight(board.getPosition(9, 1), Team.BLACK);
-        addRook(board.getPosition(10, 1), Team.BLACK);
-
-        addPawn(board.getPosition(1, 9), Team.WHITE);
-        addPawn(board.getPosition(2, 9), Team.WHITE);
-        addPawn(board.getPosition(3, 9), Team.WHITE);
-        addPawn(board.getPosition(4, 9), Team.WHITE);
-        addPawn(board.getPosition(5, 9), Team.WHITE);
-        addPawn(board.getPosition(6, 9), Team.WHITE);
-        addPawn(board.getPosition(7, 9), Team.WHITE);
-        addPawn(board.getPosition(8, 9), Team.WHITE);
-        addPawn(board.getPosition(9, 9), Team.WHITE);
-        addPawn(board.getPosition(10, 9), Team.WHITE);
-
-        addRook(board.getPosition(1, 10), Team.WHITE);
-        addKnight(board.getPosition(2, 10), Team.WHITE);
-        addBishop(board.getPosition(3, 10), Team.WHITE);
-        addQueen(board.getPosition(4, 10), Team.WHITE);
-        addKing(board.getPosition(5, 10), Team.WHITE);
-        addKing(board.getPosition(6, 10), Team.WHITE);
-        addQueen(board.getPosition(7, 10), Team.WHITE);
-        addBishop(board.getPosition(8, 10), Team.WHITE);
-        addKnight(board.getPosition(9, 10), Team.WHITE);
-        addRook(board.getPosition(10, 10), Team.WHITE);
-    }
-
     public void setupCapablanca(){
         this.sixeX = 10;
         this.sizeY = 8;
-        createBoardForNonClassicGame();
+
+        board = new Board(sixeX, sizeY);
+
+        addPawn(board.getPosition(1, 2), Team.BLACK);
+        addPawn(board.getPosition(2, 2), Team.BLACK);
+        addPawn(board.getPosition(3, 2), Team.BLACK);
+        addPawn(board.getPosition(4, 2), Team.BLACK);
+        addPawn(board.getPosition(5, 2), Team.BLACK);
+        addPawn(board.getPosition(6, 2), Team.BLACK);
+        addPawn(board.getPosition(7, 2), Team.BLACK);
+        addPawn(board.getPosition(8, 2), Team.BLACK);
+        addPawn(board.getPosition(9, 2), Team.BLACK);
+        addPawn(board.getPosition(10, 2), Team.BLACK);
+
+        addRook(board.getPosition(1, 1), Team.BLACK);
+        addKnight(board.getPosition(2, 1), Team.BLACK);
         addArchbishop(board.getPosition(3, 1), Team.BLACK);
         addBishop(board.getPosition(4, 1), Team.BLACK);
         addQueen(board.getPosition(5, 1), Team.BLACK);
@@ -127,24 +106,6 @@ public class Game {
         addRook(board.getPosition(10, 8), Team.WHITE);
     }
 
-    private void createBoardForNonClassicGame() {
-        board = new Board(sixeX, sizeY);
-
-        addPawn(board.getPosition(1, 2), Team.BLACK);
-        addPawn(board.getPosition(2, 2), Team.BLACK);
-        addPawn(board.getPosition(3, 2), Team.BLACK);
-        addPawn(board.getPosition(4, 2), Team.BLACK);
-        addPawn(board.getPosition(5, 2), Team.BLACK);
-        addPawn(board.getPosition(6, 2), Team.BLACK);
-        addPawn(board.getPosition(7, 2), Team.BLACK);
-        addPawn(board.getPosition(8, 2), Team.BLACK);
-        addPawn(board.getPosition(9, 2), Team.BLACK);
-        addPawn(board.getPosition(10, 2), Team.BLACK);
-
-        addRook(board.getPosition(1, 1), Team.BLACK);
-        addKnight(board.getPosition(2, 1), Team.BLACK);
-    }
-
     public void setCurrentTeam(Team currentTeam) {
         this.currentTeam = currentTeam;
     }
@@ -157,7 +118,7 @@ public class Game {
         return currentTeam;
     }
 
-    public void addPawn(Position initialPosition, Team team){
+    public void addPawn(Position initialPosition, Team team) {
         Pawn pawn = new Pawn(board, initialPosition, team);
         board.placePiece(pawn, initialPosition);
     }

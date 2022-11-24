@@ -29,9 +29,9 @@ public class MyGameEngine implements GameEngine {
             return new InvalidMove("No hay nada en esa posición.");
         } else if (piece.getTeam() != game.getCurrentTeam()){
             return new InvalidMove("Es el turno del equipo " + game.getCurrentTeam().toString());
-        } else if (game.getBoard().isGameOver()) { // game over cuando esta en jaque :)
+        } /*else if (game.getBoard().isGameOver()) { // game over cuando esta en jaque :)
             return new GameOver(gameIntegration.translateTeam(game.getCurrentTeam().getEnemyTeam()));
-        }else {
+        }*/else {
             //no anda
             /*if (piece.getPieceType() == PieceType.PAWN && (toPosition.getY() == 1 || toPosition.getY() == 8)){
                 piece = game.getBoard().requestQueen(piece, toPosition, piece.getTeam());
@@ -59,8 +59,7 @@ public class MyGameEngine implements GameEngine {
     @NotNull
     @Override
     public InitialState init() {
-        game.setup();
-        //game.setupTweedle();
+        game.setupClassic();
         //game.setupCapablanca();
         //chooseConfiguration();
         BoardSize boardSize = gameIntegration.translateSize(game.getSixeX(), game.getSizeY());
@@ -72,13 +71,10 @@ public class MyGameEngine implements GameEngine {
     private void chooseConfiguration(){
         boolean continuar = true;
         while (continuar){
-            System.out.println("Ingrese la configuración deseada: \n 1. Classic \n 2. Tweedle \n 3. Capablanca");
+            System.out.println("Ingrese la configuración deseada: \n 1. Classic \n 2. Capablanca");
             int option = sc.nextInt();
             if (option == 1){
-                game.setup();
-                continuar = false;
-            }else if (option == 2){
-                game.setupTweedle();
+                game.setupClassic();
                 continuar = false;
             }else {
                 game.setupCapablanca();

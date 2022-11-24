@@ -5,10 +5,7 @@ import edu.austral.dissis.chess.Position;
 import edu.austral.dissis.chess.Team;
 import edu.austral.dissis.chess.piece.Piece;
 import edu.austral.dissis.chess.piece.PieceType;
-import edu.austral.dissis.chess.piece.Rook;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Castle implements MovementValidator{
