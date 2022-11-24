@@ -2,14 +2,10 @@ package edu.austral.dissis.chess;
 
 import edu.austral.dissis.chess.piece.*;
 
-import java.util.Scanner;
-
 public class Game {
 
     private Board board;
     private Team currentTeam;
-
-    Scanner userInput = new Scanner(System.in);
     private int sixeX;
     private int sizeY;
 
@@ -151,37 +147,6 @@ public class Game {
 
     public void setCurrentTeam(Team currentTeam) {
         this.currentTeam = currentTeam;
-    }
-
-    public void gameLoop(){
-        boolean continueGame = true;
-        setup();
-        while(continueGame){
-
-            System.out.println("que pieza quiere mover? X-loc: ");
-            int nextX = userInput.nextInt();
-            System.out.println("Y-loc: ");
-            int nextY = userInput.nextInt();
-            Position position = board.getPosition(nextX, nextY);
-            Piece target = board.getPiece(position);
-
-            if (target == null){
-                System.out.println("no hay ninguna pieza en esa posicion.");
-                continueGame = true;
-            }else if (target.getTeam() != currentTeam){
-                System.out.println("no es tuya");
-                continueGame = false;
-            }else {
-                System.out.println("A donde se quiere mover? X-loc: ");
-                nextX = userInput.nextInt();
-                System.out.println("Y-loc: ");
-                nextY = userInput.nextInt();
-                Position finalPos = board.getPosition(nextX, nextY);
-
-                target.makeMove(finalPos);
-
-            }
-        }
     }
 
     public Board getBoard() {

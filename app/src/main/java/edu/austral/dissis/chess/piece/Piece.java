@@ -36,10 +36,6 @@ public class Piece {
         return initialPosition;
     }
 
-    public boolean isEaten() {
-        return eaten;
-    }
-
     public Position getPosition() {
         return position;
     }
@@ -54,6 +50,10 @@ public class Piece {
 
     public PieceType getPieceType() {
         return pieceType;
+    }
+
+    public boolean isCheck() {
+        return isCheck;
     }
 
     public void makeMove(Position otherPosition) {
@@ -96,7 +96,6 @@ public class Piece {
                     this.position = otherPosition;
                     this.hasMoved = true;
                     board.placePiece(this, otherPosition);
-                    //checksIfCheck(otherPosition);
                     return true;
                 }else return false;
             }
@@ -107,10 +106,8 @@ public class Piece {
         if (board != null){
             for (Rule rule : rules) {
                 if (rule.validateRule(board, new Movement(this, otherPosition))) {
-                    //isCheck = true;
                     return true;
                 }else {
-                    //isCheck = false;
                     return false;
                 }
             }
@@ -122,7 +119,7 @@ public class Piece {
             for (Rule rule : rules) {
                 Position originalPosition = getPosition();
                 if (rule.validateRule(board, new Movement(this, otherPosition))) {
-                    checksIfCheck(otherPosition);
+                    //checksIfIsCheck(otherPosition);
                     if (!isCheck){
                         if (board.getPiece(getPosition()) == this){
                             board.removeFromBoard(this);
@@ -146,13 +143,13 @@ public class Piece {
     }
 
     public boolean moveGeneric(Position otherPosition){
-        checksIfCheck(otherPosition);
+        checksIfIsCheck(otherPosition);
         if (isCheck){
             return getOutOfCheck(otherPosition);
         }else return moveTo(otherPosition);
     }
 
-    public void checksIfCheck(Position otherPosition){
+    public void checksIfIsCheck(Position otherPosition){
         if (checkValidator.validateMove(board, new Movement(this, otherPosition))){
             isCheck = true;
         }else isCheck = false;

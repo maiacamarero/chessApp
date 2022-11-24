@@ -14,7 +14,6 @@ public class Board {
     private Map<Position, Piece> piecesPositions;
     private List<Piece> pieces;
     private List<Position> positions;
-    private Map<Position, Piece> historicalPositions;
     private List<Piece> whites;
     private List<Piece> blacks;
     private int sizeX;
@@ -29,7 +28,6 @@ public class Board {
         blacks = new ArrayList<>();
         fillBoard();
         piecesPositions = new HashMap<>();
-        historicalPositions = new HashMap<>();
     }
 
     public void fillBoard(){
@@ -38,10 +36,6 @@ public class Board {
                 positions.add(new Position(i, j));
             }
         }
-    }
-
-    public int getSizeX() {
-        return sizeX;
     }
 
     public int getSizeY() {
@@ -54,14 +48,6 @@ public class Board {
         }else{
             return false;
         }
-    }
-
-    public Map<Position, Piece> getHistoricalPositions() {
-        return historicalPositions;
-    }
-
-    public Piece getHistoricalPiece(Position position){
-        return historicalPositions.get(position);
     }
 
     public void removeFromBoard(Piece piece) {
@@ -88,18 +74,30 @@ public class Board {
     public Piece getPiece(Position position) {
         if (isInBounds(position)){
             return piecesPositions.get(position);
-        }throw new RuntimeException("Position is out of bounds.");
+        }throw new RuntimeException("Position is out of bounds."); // esto esta mal obvio
     }
 
     public void placePiece(Piece piece, Position position) {
         if (isInBounds(position)){
             piecesPositions.put(position, piece);
-            historicalPositions.put(position, piece);
             pieces.add(piece);
             if (piece.getTeam() == Team.BLACK){
                 blacks.add(piece);
             }else whites.add(piece);
         }
+    }
+
+    public boolean isGameOver(){
+        for (int i = 0; i < pieces.size(); i++) {
+            if (pieces.get(i).isCheck()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<Piece> getPieces() {
+        return pieces;
     }
 
     public Piece requestQueen(Piece piece, Position position, Team team){
@@ -109,19 +107,7 @@ public class Board {
         return queen;
     }
 
-//    public boolean isGameOver(){
-//        return isCheckmate(Team.WHITE) || isCheckmate(Team.BLACK);
-//    }
-
-    public List<Piece> getPieces() {
-        return pieces;
-    }
-
-    public List<Position> getPositions() {
-        return positions;
-    }
-
-    private Piece getKingByColor(Team team){
+    public Position getKingPositionByColor(Team team){
         Piece king = null;
         for (Piece pieceOnBoard: pieces) { // busco el rey
             if (pieceOnBoard != null && pieceOnBoard.getTeam() == team && pieceOnBoard.getPieceType() == PieceType.KING){
@@ -129,6 +115,7 @@ public class Board {
                 break;
             }
         }
-        return king;
+        assert king != null;
+        return king.getPosition();
     }
 }
