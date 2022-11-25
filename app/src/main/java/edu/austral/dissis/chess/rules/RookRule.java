@@ -1,7 +1,6 @@
 package edu.austral.dissis.chess.rules;
 
 import edu.austral.dissis.chess.*;
-import edu.austral.dissis.chess.movements.Castle;
 import edu.austral.dissis.chess.movements.Horizontal;
 import edu.austral.dissis.chess.movements.Movement;
 import edu.austral.dissis.chess.movements.Vertical;
@@ -10,7 +9,6 @@ import edu.austral.dissis.chess.piece.Piece;
 public class RookRule implements Rule {
     @Override
     public boolean validateRule(Board board, Movement movement) {
-        Castle castleMove = new Castle(movement.getPiece().getPosition().getY());
         Vertical verticalMove = new Vertical();
         Horizontal horizontalMove = new Horizontal();
         Piece target = board.getPiece(movement.getFinalPosition());

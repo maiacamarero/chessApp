@@ -1,0 +1,211 @@
+@startuml
+class Piece{
+ - position: Position
+ - team: Team
+ - initialPosition: Position
+ - rules: List<Rule>
+ - pieceType: PieceType
+ - isCheck: boolean
+ - board: Board
+ + moveGeneric (Position): boolean
+ + checksIfIsCheck (Position): void
+ + getOutOfCheck (Position): boolean
+ + canMove (Position): boolean
+ + moveTo (Position): boolean
+}
+
+class Pawn{
+ + Pawn(Board, Position, Team)
+}
+
+class Bishop{
+ + Bishop(Board, Position, Team)
+}
+
+class King{
+ + King(Board, Position, Team)
+}
+
+class Chancellor{
+ + Chancellor(Board, Position, Team)
+}
+
+class Archbishop{
+ + Archbishop(Board, Position, Team)
+}
+
+class Queen{
+ + Queen(Board, Position, Team)
+}
+
+class Rook{
+ + Rook(Board, Position, Team)
+}
+
+class Knight{
+ + Knight(Board, Position, Team)
+}
+
+Piece <-- Pawn
+Piece <-- Bishop
+Piece <-- Knight
+Piece <-- King
+Piece <-- Chancellor
+Piece <-- Archbishop
+Piece <-- Queen
+Piece <-- Rook
+
+class Board{
+ + Board(int, int)
+ - pieces: List<Piece>
+ - whites: List<Piece>
+ - blacks: List<Piece>
+ - sizeX: int
+ - sizeY: int
+ - piecesPositions: Map<Position, Piece>
+ - positions: List<Position>
+ + getPiece(Position): Piece
+ + getPosition(int, int): Position
+ + fillBoard(): void
+ + removeFromBoard(Team): void
+ + placePiece(Piece, Position): void
+ + isInBounds(Position): boolean
+}
+
+enum PieceType{
+ - KING
+ - KNIGHT
+ - PAWN
+ - ROOK
+ - CHANCELLOR
+ - QUEEN
+ - ARCHBISHOP
+ - BISHOP
+}
+
+enum Team{
+    - WHITE
+    - BLACK
+    + getEnemyTeam(): Team
+}
+
+interface Rule{
+ + validateRule(Board, Movement): boolean
+}
+
+class KingRule{
+ + validateRule(Board, Movement): boolean
+}
+
+class KnightRule{
+ + validateRule(Board, Movement): boolean
+}
+
+class PawnRule{
+ + validateRule(Board, Movement): boolean
+}
+
+class RookRule{
+ + validateRule(Board, Movement): boolean
+}
+
+class ChancellorRule{
+ + validateRule(Board, Movement): boolean
+}
+
+class QueenRule{
+ + validateRule(Board, Movement): boolean
+}
+
+class ArchbishopRule{
+ + validateRule(Board, Movement): boolean
+}
+
+class BishopRule{
+ + validateRule(Board, Movement): boolean
+}
+
+Rule <.. KingRule
+Rule <.. KnightRule
+Rule <.. PawnRule
+Rule <.. RookRule
+Rule <.. ChancellorRule
+Rule <.. QueenRule
+Rule <.. ArchbishopRule
+Rule <.. BishopRule
+
+class Movement{
+ + Movement(Piece, Position)
+ - piece: Piece
+ - finalPosition: Position
+}
+
+class MyGameEngine{
+ + MyGameEngine()
+ - gameIntegration: GameIntegration
+ - game: Game
+ + getCurrentPlayer(boolean, PlayerColor): PlayerColor
+ + applyMove(Move): MoveResult
+ + init(): InitialState
+}
+
+interface MovementValidator{
+ + validateMove(Board, Movement): boolean
+}
+
+class Diagonal{
+ + validateMove(Board, Movement) : boolean
+}
+
+class Vertical{
+ + validateMove(Board, Movement) : boolean
+}
+
+class Horizontal{
+ + validateMove(Board, Movement) : boolean
+}
+
+class Check{
+ + validateMove(Board, Movement) : boolean
+ - getAttackingPieces(Board, Movement): List<Piece>
+}
+
+MovementValidator <.. Diagonal
+MovementValidator <.. Vertical
+MovementValidator <.. Horizontal
+MovementValidator <.. Check
+
+class Position{
+ + Position(int, int)
+ - x: int
+ - y: int
+}
+
+class GameIntegration{
+ + GameIntegration()
+ + translateTeam(Team): PlayerColor
+ + translateSize(int, int): BoardSize
+ + translatePosition(Position): Position
+ + translatePiece(Piece): ChessPiece
+ + translatePieces(Board, List<Piece>): List<ChessPiece>
+}
+
+class Game{
+ + Game()
+ - sizeX: int
+ - sizeY: int
+ - board: Board
+ - currentTeam: Team
+ + addQueen(Position, Team): void
+ + addArchbishop(Position, Team): void
+ + addKing(Position, Team): void
+ + addRook(Position, Team): void
+ + addBishop(Position, Team): void
+ + addKnight(Position, Team): void
+ + addPawn(Position, Team): void
+ + addChancellor(Position, Team): void
+ + setupClassic(): void
+ + setupCapablanca(): void
+}
+
+@enduml
